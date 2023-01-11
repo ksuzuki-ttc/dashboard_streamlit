@@ -77,9 +77,9 @@ solve = sp.integrate.solve_ivp(fun=SIR,
 #fig.show()
 plt.figure(figsize=(6, 4))
 plt.plot(solve.t,solve.y.T)
-plt.xlabel("日数")
-plt.ylabel("人数")
-plt.legend(['感受性保持者','感染者', '免疫保持者'])
+plt.xlabel("day")
+plt.ylabel("population")
+plt.legend(['Susceptible','Infectious', 'Removed'])
 st.pyplot(plt)
 
 
