@@ -1,7 +1,8 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import scipy as sp
+from scipy import stats
+from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
 plt.rcParams['font.family'] = 'Meiryo'
 
@@ -19,7 +20,7 @@ sigma = st.sidebar.slider('正規分布の分散', min_value=0, max_value=20, st
 
 ## 標準正規分布の描画
 x_1 = np.linspace(-10, 10, 100)
-z = sp.stats.norm.pdf(x_1, mu, sigma)
+z = stats.norm.pdf(x_1, mu, sigma)
 fig_norm, ax1 = plt.subplots()
 ax1.plot(x_1, z, label='std_norm')
 ax1.legend()
@@ -36,7 +37,7 @@ lam = st.sidebar.slider('ポアソン分布の期待値', min_value=0, max_value
 
 ## ポアソン分布の描画
 x_2 = np.linspace(0, 30, 31)
-r = sp.stats.poisson.pmf(x_2, lam)
+r = stats.poisson.pmf(x_2, lam)
 fig_pois, ax2 = plt.subplots()
 ax2.bar(x_2, height=r, color='#00A968', label='poisson')
 ax2.legend()
@@ -66,11 +67,11 @@ gamma = 1 / st.sidebar.slider('回復率（回復までの日数）', min_value=
 beta = r * gamma / S0       # 感染率
 
 ## 分析
-solve = sp.integrate.solve_ivp(fun=SIR,
-                               t_span=[0, T],
-                               y0=[S0, I0, R0],
-                               args=[beta, gamma],
-                               dense_output=True)
+solve = solve_ivp(fun=SIR,
+                  t_span=[0, T],
+                  y0=[S0, I0, R0],
+                  args=[beta, gamma],
+                  dense_output=True)
 
 ## 分析結果の可視化
 #ig = px.line(solve.t,solve.y.T)
